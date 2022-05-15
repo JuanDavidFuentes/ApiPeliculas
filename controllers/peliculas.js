@@ -11,11 +11,21 @@ const peliculasPost=async(req,res)=>{
 }
 
 const peliculasGet = async(req, res)=>{
-    const pelicula=await peliculas.find()
+    const pelicula=await peliculas
+    .find()
+    .populate("reparto.idactor",["nombre","foto","observaciones"])
+    res.json({
+        pelicula
+    })
+}
+
+const buscarpeliGet=async(req, res)=>{
+    const {titulo}=req.query;
+    const pelicula=await peliculas.find({titulo})
     res.json({
         pelicula
     })
 }
 
 
-export {peliculasPost,peliculasGet}
+export {peliculasPost,peliculasGet,buscarpeliGet}

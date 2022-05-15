@@ -10,8 +10,9 @@ const PersonSchema = new mongoose.Schema({
     calificacion:{type:Number},
     imagen:{type:String,required:true},
     reparto:[
-        {nombre:{type:String,maxlength:15,required:true},
-        personaje: {type:String,maxlength:15,required:true}}
+        {idactor:{type:mongoose.Schema.ObjectId,ref:"Actores",required:true},
+        personaje:{type:String,required:true}
+        }
     ],
     createdAt:{type:Date,default:Date.now()}
 })
