@@ -5,6 +5,7 @@ import pelicula from "../routes/peliculas.js";
 import usuario from "../routes/usuarios.js";
 import favoritos from "../routes/favoritos.js";
 import actores from "../routes/actores.js"
+import comentarios from "../routes/comentarios.js"
 
 class Server{
     constructor(){
@@ -30,6 +31,7 @@ class Server{
         this.app.use("/api/usuario",usuario)
         this.app.use("/api/favoritos",favoritos)
         this.app.use("/api/actores",actores)
+        this.app.use("/api/comentarios",comentarios)
     }
 
     listen(){

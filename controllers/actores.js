@@ -1,8 +1,8 @@
 import Actores from "../models/actores.js"
 
-const actorPost=async(req, res)=>{
-    const{nombre,foto,observaciones}=req.body
-    const actor=new Actores({nombre,foto,observaciones})
+const actorPost=async(req, res)=>{ 
+    const{nombre,observaciones}=req.body
+    const actor=new Actores({nombre,observaciones})
     await actor.save()
     res.json({
         "msg":"Actor agregado exitosamente 👌"
@@ -20,6 +20,34 @@ const actorBuscar=async(req, res)=>{
     res.json({actor})
 }
 
+const actorBuscarId=async(req, res)=>{
+    const {_id}=req.query;
+    const idActor=await Actores.find({_id})
+    res.json({idActor})
+}
 
+const fotoPut=async(req, res)=>{
+    const {foto}=req.body
+    const {id}=req.params;
+    const actorFoto=await Actores.findByIdAndUpdate(id,{foto})
+    res.json({
+        "msg":`Foto insertada`
+    })
+}
 
-export{actorPost,actorGet,actorBuscar}
+const editarPut=async(req, res)=>{
+    const {nombre,observaciones}=req.body
+    const {id}=req.params;
+    const actorEditar=await Actores.findByIdAndUpdate(id,{nombre,observaciones})
+    res.json({
+        "msg":`Datos modificados con exito`
+    })
+}
+
+const actorBorrarId=async(req, res)=>{
+    const {id}=req.params;
+    const idActor=await Actores.findOneAndDelete({id})
+    res.json({"Eliminado":idActor})
+}
+
+export{actorPost,actorGet,actorBuscar,actorBuscarId,fotoPut,editarPut,actorBorrarId}

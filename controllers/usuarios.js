@@ -2,6 +2,7 @@ import Usuario from "../models/usuarios.js";
 import bcryptjs from "bcryptjs";
 
 const usuarioPost=async(req, res)=>{
+       
     const {usuario,nombre,apellido,email,contrasena}=req.body
     let salt=bcryptjs.genSaltSync(10)
     const usuarioo=new Usuario({usuario,nombre,apellido,email,contrasena})
