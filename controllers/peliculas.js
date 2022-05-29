@@ -1,8 +1,8 @@
 import peliculas from "../models/peliculas.js";
 
 const peliculasPost=async(req,res)=>{
-    const {titulo,subtitulo,fecha,descripcion,genero,duracion,calificacion,imagen,reparto}=req.body;
-    const pelicula=new peliculas({titulo,subtitulo,fecha,descripcion,genero,duracion,calificacion,imagen,reparto});
+    const {titulo,subtitulo,fecha,descripcion,genero,duracion,calificacion,reparto}=req.body;
+    const pelicula=new peliculas({titulo,subtitulo,fecha,descripcion,genero,duracion,calificacion,reparto});
     await pelicula.save();
 
     res.json({
@@ -19,6 +19,7 @@ const peliculasGet = async(req, res)=>{
     })
 }
 
+
 const buscarpeliGet=async(req, res)=>{
     const {titulo}=req.query;
     const pelicula=await peliculas.find({titulo})
@@ -27,5 +28,45 @@ const buscarpeliGet=async(req, res)=>{
     })
 }
 
+const idGetPeli=async(req, res)=>{
+    const {id}=req.query
+    const idPeli=await peliculas.find({id})
+    res.json({idPeli})
+}
 
-export {peliculasPost,peliculasGet,buscarpeliGet}
+const actorBuscarGet=async(req, res)=>{
+    const {idActor}=req.query;
+    const peli= await peliculas.find({idActor})
+    res.json({peli})
+}
+
+
+const posterPut=async(req, res)=>{
+    const {imagen}=req.body
+    const {id}=req.params;
+    const poster=await peliculas.findByIdAndUpdate(id,{imagen})
+    res.json({
+        "msg":"Poster insertado con exito"
+    })
+}
+
+const modificarPut=async(req, res)=>{
+    const {titulo,subtitulo,fecha,descripcion,genero,duracion,calificacion,reparto}=req.body
+    const {id}=req.params;
+    const editar=await peliculas.findByIdAndUpdate(id,{titulo,subtitulo,fecha,descripcion,genero,duracion,calificacion,reparto})
+    res.json({
+        "msg":"Pelicula editada con exito"
+    })
+}
+
+const eliminarPeli=async(req, res)=>{
+    const {id}=req.params;
+    const peli=await peliculas.findOneAndDelete({id})
+    res.json({
+        "msg":"Se elimino exitosamente"
+    })
+}
+
+
+
+export {peliculasPost,peliculasGet,buscarpeliGet,idGetPeli,actorBuscarGet,posterPut,modificarPut,eliminarPeli}

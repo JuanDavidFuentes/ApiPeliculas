@@ -23,6 +23,8 @@ router.put('/:id',[
 ],fotoPut)
 
 router.put('/editar/:id',[
+    check('nombre',"El nombre es obligatorio").not().isEmpty(),
+    check('nombre',"El nombre debe tener menos de 20 caracteres").isLength({max:20}),
     check("id").custom(validarMongoIdN),
     validarCampos
 ],editarPut)

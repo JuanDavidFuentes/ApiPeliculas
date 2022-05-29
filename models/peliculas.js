@@ -8,7 +8,7 @@ const PersonSchema = new mongoose.Schema({
     genero:{type:String,maxlength:20,required:true},
     duracion:{type:String,required:true},
     calificacion:{type:Number},
-    imagen:{type:String,required:true},
+    imagen:{type:String},
     reparto:[
         {idactor:{type:mongoose.Schema.ObjectId,ref:"Actores",required:true},
         personaje:{type:String,required:true}

@@ -6,6 +6,7 @@ const UsuarioSchema=new mongoose.Schema({
     apellido:{type:String,maxlength:20,required:true},
     email:{type:String,maxlength:100,required:true},
     contrasena:{type:String,required:true,minlength:6},
+    foto:{type:String},
     createdAt:{type:Date,default:Date.now()}
 });
 

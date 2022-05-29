@@ -28,4 +28,37 @@ const comentarioListarTodo=async(req, res)=>{
     })
 }
 
-export{comentarioPost,comentarioGet,comentarioListarTodo}
+const listarCdeU=async(req, res)=>{
+    const {idUsuario}=req.query;
+    const comen=await Comentario.find({idUsuario})
+    res.json({comen})
+}
+
+const listarCdeP=async(req, res)=>{
+    const {idPeli}=req.query;
+    const comen=await Comentario.find({idPeli})
+    res.json({comen})
+}
+
+const listarIdC=async(req, res)=>{
+    const {id}=req.query;
+    const comen=await Comentario.find({id})
+    res.json({comen})
+}
+
+const buscarC=async(req, res)=>{
+    const {comentario}=req.query;
+    const comen=await Comentario.find({comentario})
+    res.json({comen})
+}
+
+
+const eliminarC=async(req, res)=>{
+    const {id}=req.params;
+    const com= await Comentario.findOneAndDelete({id})
+    res.json({
+        "msg":"Comentario eliminado exitosamente"
+    })
+}
+
+export{comentarioPost,comentarioGet,comentarioListarTodo,listarCdeU,listarIdC,buscarC,eliminarC,listarCdeP}

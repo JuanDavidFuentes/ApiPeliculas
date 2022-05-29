@@ -47,7 +47,9 @@ const editarPut=async(req, res)=>{
 const actorBorrarId=async(req, res)=>{
     const {id}=req.params;
     const idActor=await Actores.findOneAndDelete({id})
-    res.json({"Eliminado":idActor})
+    res.json({
+        "msg":"Eliminado exitosamente"
+    })
 }
 
 export{actorPost,actorGet,actorBuscar,actorBuscarId,fotoPut,editarPut,actorBorrarId}
