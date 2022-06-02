@@ -22,9 +22,15 @@ routes.get("/",peliculasGet);
 
 routes.get("/buscar",buscarpeliGet);
 
-routes.get("/buscarID",idGetPeli);
+routes.get("/buscarID/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],idGetPeli);
 
-routes.get("/BuscarActorId",actorBuscarGet);
+routes.get("/BuscarActorId/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],actorBuscarGet);
 
 routes.put("/:id",[
     check("id").custom(validarMongoIdN),

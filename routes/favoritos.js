@@ -1,9 +1,10 @@
 import {Router} from 'express';
-import { favget, favpost } from '../controllers/favoritos.js';
+import { favEliminar, favget, favlistarId, favListarU, favPeliTitulo, favpost } from '../controllers/favoritos.js';
 import { check } from 'express-validator';
 import HelperUsuario from '../helpser/usuarios.js';
 import HelperPelicula from '../helpser/peliculas.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
+import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
 const router =Router()
 
 router.post("/",[
@@ -17,5 +18,22 @@ router.post("/",[
 ],favpost)
 
 router.get("/",favget)
+
+router.get("/listarU/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],favListarU)
+
+router.get("/listarId/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],favlistarId)
+
+router.get("/buscarTituloP",favPeliTitulo)
+
+router.delete("/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],favEliminar)
 
 export default router

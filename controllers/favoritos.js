@@ -19,6 +19,34 @@ const favget=async(req, res)=>{
     })
 }
 
+const favListarU=async(req, res)=>{
+    const {id}=req.params;
+    const fav=await Fav.find({id})
+    res.json({fav})
+}
+
+const favlistarId=async(req, res)=>{
+    const {id}=req.params;
+    const fav=await Fav.findById(id)
+    res.json({fav})
+}
+
+const favPeliTitulo=async(req, res)=>{
+    const{titulo}=req.query;
+    const fav=await Fav.find({titulo})
+    res.json({fav})
+}
+
+const favEliminar=async(req, res)=>{
+    const{id}=req.params;
+    const fav=await Fav.findOneAndDelete({id})
+    res.json({
+        "msg":"Se he eliminado correctamente"
+    })
+}
 
 
-export{favpost,favget}
+
+
+
+export{favpost,favget,favListarU,favlistarId,favPeliTitulo,favEliminar}

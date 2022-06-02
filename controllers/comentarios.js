@@ -20,29 +20,21 @@ const comentarioGet=async(req, res)=>{
     })
 }
 
-const comentarioListarTodo=async(req, res)=>{
-    const {usuario}=req.query;
-    const com= await Comentario.find({usuario})
-    res.json({
-        com
-    })
-}
-
 const listarCdeU=async(req, res)=>{
-    const {idUsuario}=req.query;
-    const comen=await Comentario.find({idUsuario})
+    const {id}=req.params;
+    const comen=await Comentario.find({id})
     res.json({comen})
 }
 
 const listarCdeP=async(req, res)=>{
-    const {idPeli}=req.query;
-    const comen=await Comentario.find({idPeli})
+    const {id}=req.params;
+    const comen=await Comentario.find({id})
     res.json({comen})
 }
 
 const listarIdC=async(req, res)=>{
-    const {id}=req.query;
-    const comen=await Comentario.find({id})
+    const {id}=req.params;
+    const comen=await Comentario.findById(id)
     res.json({comen})
 }
 
@@ -61,4 +53,4 @@ const eliminarC=async(req, res)=>{
     })
 }
 
-export{comentarioPost,comentarioGet,comentarioListarTodo,listarCdeU,listarIdC,buscarC,eliminarC,listarCdeP}
+export{comentarioPost,comentarioGet,listarCdeU,listarIdC,buscarC,eliminarC,listarCdeP}

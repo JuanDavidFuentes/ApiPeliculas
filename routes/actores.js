@@ -15,7 +15,9 @@ router.get('/',actorGet)
 
 router.get('/buscar',actorBuscar)
 
-router.get('/buscarId',actorBuscarId)
+router.get('/buscarId/:id',[
+    check('id').custom(validarMongoIdN)
+],actorBuscarId)
 
 router.put('/:id',[
     check('id').custom(validarMongoIdN),

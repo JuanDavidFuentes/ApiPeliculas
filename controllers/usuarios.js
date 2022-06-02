@@ -19,18 +19,22 @@ const listarUsuarios=async(req, res)=>{
 }
 
 const listarId=async(req, res)=>{
-    const {id}=req.query;
-    const listar=await Usuario.find({id})
+    const {id}=req.params;
+    const listar=await Usuario.findById(id)
     res.json({listar})
 }
 
 
-const buscarUsuario=async(req, res)=>{// NO me combense
-    const {nombre}=req.query;
-    const usuarioN=await Usuario.find({nombre})
+const buscarUsuario=async(req, res)=>{
+    const {valorABuscar}=req.query;
+    const usuarioN=await Usuario.find({$or:[
+        { nombre: { $regex: valorABuscar  } },
+        { email: { $regex: valorABuscar  } },
+    ]})
     res.json({
         usuarioN
     })
+
 }
 
 const fotoPut=async(req, res)=>{
@@ -52,6 +56,24 @@ const modificarPut=async(req, res)=>{
 }
 
 
+const activarPut=async(req, res)=>{
+    const {id}=req.params;
+    const activar=await Usuario.findByIdAndUpdate(id,{estado:1})
+    res.json({
+        "msg":"El usuario esta activado"
+    })
+}
+
+const desactivarPut=async(req, res)=>{
+    const {id}=req.params;
+    const activar=await Usuario.findByIdAndUpdate(id,{estado:0})
+    res.json({
+        "msg":"El usuario esta desactivado"
+    })
+}
+
+
+
 const usuarioLogin=async(req, res)=>{
     let {email,contrasena}=req.query
     const usuario=await Usuario.findOne({email})//esto significa que esta buscando un email igual al que el usuario esta digitando solo se poone un email para abrebiar
@@ -67,4 +89,4 @@ const usuarioLogin=async(req, res)=>{
 }
 
 
-export {usuarioPost,usuarioLogin,listarUsuarios,listarId,buscarUsuario,fotoPut,modificarPut}
+export {usuarioPost,usuarioLogin,listarUsuarios,listarId,buscarUsuario,fotoPut,modificarPut,activarPut,desactivarPut}

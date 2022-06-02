@@ -21,8 +21,8 @@ const actorBuscar=async(req, res)=>{
 }
 
 const actorBuscarId=async(req, res)=>{
-    const {_id}=req.query;
-    const idActor=await Actores.find({_id})
+    const {id}=req.params;
+    const idActor=await Actores.find({id})
     res.json({idActor})
 }
 

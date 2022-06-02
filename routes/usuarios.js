@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { buscarUsuario, fotoPut, listarId, listarUsuarios, modificarPut, usuarioLogin, usuarioPost } from '../controllers/usuarios.js';
+import { activarPut, buscarUsuario, desactivarPut, fotoPut, listarId, listarUsuarios, modificarPut, usuarioLogin, usuarioPost } from '../controllers/usuarios.js';
 import { check } from 'express-validator';
 import HelperUsuario from '../helpser/usuarios.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
@@ -25,7 +25,10 @@ router.get("/", usuarioLogin);
 
 router.get("/listar",listarUsuarios);
 
-router.get("/listarID",listarId);
+router.get("/listarID/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],listarId);
 
 router.get("/buscarU",buscarUsuario);
 
@@ -50,5 +53,14 @@ router.put("/editar/:id",[
     validarCampos
 ],modificarPut)
 
+router.put('/activar/:id',[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],activarPut)
+
+router.put('/desactivar/:id',[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],desactivarPut)
 
 export default router;

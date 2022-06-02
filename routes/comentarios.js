@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { buscarC, comentarioGet, comentarioListarTodo, comentarioPost, eliminarC, listarCdeP, listarCdeU, listarIdC } from '../controllers/comentarios.js';
+import { buscarC, comentarioGet, comentarioPost, eliminarC, listarCdeP, listarCdeU, listarIdC } from '../controllers/comentarios.js';
 import { check } from 'express-validator';
 import HelperUsuario from '../helpser/usuarios.js';
 import HelperPelicula from '../helpser/peliculas.js';
@@ -20,13 +20,20 @@ router.post('/',[
 
 router.get('/',comentarioGet);
 
-router.get('/listar',comentarioListarTodo);
+router.get("/listarCdeU/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],listarCdeU);
 
-router.get("/listarCdeU",listarCdeU);
+router.get("/listarCdeP/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],listarCdeP);
 
-router.get("/listarCdeP",listarCdeP);
-
-router.get("/listarId",listarIdC);
+router.get("/listarId/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],listarIdC);
 
 router.get("/buscarC",buscarC);
 

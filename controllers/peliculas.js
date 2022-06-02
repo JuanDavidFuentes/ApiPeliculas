@@ -29,14 +29,14 @@ const buscarpeliGet=async(req, res)=>{
 }
 
 const idGetPeli=async(req, res)=>{
-    const {id}=req.query
-    const idPeli=await peliculas.find({id})
+    const {id}=req.params;
+    const idPeli=await peliculas.findById(id)
     res.json({idPeli})
 }
 
 const actorBuscarGet=async(req, res)=>{
-    const {idActor}=req.query;
-    const peli= await peliculas.find({idActor})
+    const {id}=req.params;
+    const peli= await peliculas.find({id})
     res.json({peli})
 }
 
