@@ -22,13 +22,13 @@ const comentarioGet=async(req, res)=>{
 
 const listarCdeU=async(req, res)=>{
     const {id}=req.params;
-    const comen=await Comentario.find({id})
+    const comen=await Comentario.find().where('usuario').in(id).exec();
     res.json({comen})
 }
 
 const listarCdeP=async(req, res)=>{
     const {id}=req.params;
-    const comen=await Comentario.find({id})
+    const comen=await Comentario.find().where('pelicula').in(id).exec();
     res.json({comen})
 }
 

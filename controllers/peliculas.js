@@ -36,7 +36,7 @@ const idGetPeli=async(req, res)=>{
 
 const actorBuscarGet=async(req, res)=>{
     const {id}=req.params;
-    const peli= await peliculas.find({id})
+    const peli= await peliculas.find().where('reparto.idactor').in(id).exec();
     res.json({peli})
 }
 

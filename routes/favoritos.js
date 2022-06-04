@@ -29,7 +29,10 @@ router.get("/listarId/:id",[
     validarCampos
 ],favlistarId)
 
-router.get("/buscarTituloP",favPeliTitulo)
+router.get("/buscarTituloP/:id",[
+    check('id').custom(validarMongoIdN),
+    validarCampos
+],favPeliTitulo)
 
 router.delete("/:id",[
     check('id').custom(validarMongoIdN),
