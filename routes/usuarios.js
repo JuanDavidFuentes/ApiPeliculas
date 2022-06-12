@@ -1,9 +1,10 @@
 import {Router} from 'express';
-import { activarPut, buscarUsuario, desactivarPut, fotoPut, listarId, listarUsuarios, modificarPut, usuarioLogin, usuarioPost } from '../controllers/usuarios.js';
+import { activarPut, buscarUsuario, desactivarPut, editarUsuarioDenuestraapiPeliculasPutAloJholman, fotoPut, listarId, listarUsuarios, usuarioLogin, usuarioPost } from '../controllers/usuarios.js';
 import { check } from 'express-validator';
 import HelperUsuario from '../helpser/usuarios.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
+import { validarJWT } from '../middlewares/Validarjwt.js';
 
 const router=Router();
 router.post("/",[
@@ -21,7 +22,11 @@ router.post("/",[
     validarCampos
 ],usuarioPost);
 
-router.get("/", usuarioLogin);
+router.get("/",[
+    check('email').custom(HelperUsuario.noexisteEmail),
+    check('email',"No es un email valido").isEmail(),
+    validarCampos
+], usuarioLogin);
 
 router.get("/listar",listarUsuarios);
 
@@ -33,11 +38,14 @@ router.get("/listarID/:id",[
 router.get("/buscarU",buscarUsuario);
 
 router.put("/:id",[
+    validarJWT,
     check("id").custom(validarMongoIdN),
     validarCampos
 ],fotoPut);
 
-router.put("/editar/:id",[
+    
+router.put('/editar/:id',[
+    validarJWT,
     check("id").custom(validarMongoIdN),
     check('usuario',"El usuario es obligatorio").not().isEmpty(),
     check('usuario',"Debe tener menos de 20 caracteres").isLength({max:20}),
@@ -51,14 +59,16 @@ router.put("/editar/:id",[
     check('contrasena',"El contrasena es obligatorio").not().isEmpty(),
     check('contrasena',"Debe tener mas de 6 caracteres").isLength({min:6}),
     validarCampos
-],modificarPut)
+],editarUsuarioDenuestraapiPeliculasPutAloJholman)
 
 router.put('/activar/:id',[
+    validarJWT,
     check('id').custom(validarMongoIdN),
     validarCampos
 ],activarPut)
 
 router.put('/desactivar/:id',[
+    validarJWT,
     check('id').custom(validarMongoIdN),
     validarCampos
 ],desactivarPut)

@@ -5,9 +5,11 @@ import HelperUsuario from '../helpser/usuarios.js';
 import HelperPelicula from '../helpser/peliculas.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
+import { validarJWT } from '../middlewares/Validarjwt.js';
 const router =Router()
 
 router.post("/",[
+    validarJWT,
     check('usuario',"El usuario es obligatorio").not().isEmpty(),
     check('usuario',"Usuario no existe").isMongoId(),
     check('usuario').custom(HelperUsuario.existeUsuario),
@@ -17,24 +19,30 @@ router.post("/",[
     validarCampos
 ],favpost)
 
-router.get("/",favget)
+router.get("/",[
+    validarJWT,
+],favget)
 
 router.get("/listarU/:id",[
+    validarJWT,
     check('id').custom(validarMongoIdN),
     validarCampos
 ],favListarU)
 
 router.get("/listarId/:id",[
+    validarJWT,
     check('id').custom(validarMongoIdN),
     validarCampos
 ],favlistarId)
 
 router.get("/buscarTituloP/:id",[
+    validarJWT,
     check('id').custom(validarMongoIdN),
     validarCampos
 ],favPeliTitulo)
 
 router.delete("/:id",[
+    validarJWT,
     check('id').custom(validarMongoIdN),
     validarCampos
 ],favEliminar)

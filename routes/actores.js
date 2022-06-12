@@ -3,9 +3,11 @@ import { actorBorrarId, actorBuscar, actorBuscarId, actorGet, actorPost, editarP
 import { check } from 'express-validator';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
+import { validarJWT } from '../middlewares/Validarjwt.js';
 const router =Router()
 
 router.post('/',[
+    validarJWT,
     check('nombre',"El nombre es obligatorio").not().isEmpty(),
     check('nombre',"El nombre debe tener menos de 20 caracteres").isLength({max:20}),
     validarCampos

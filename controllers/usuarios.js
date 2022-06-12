@@ -1,5 +1,7 @@
 import Usuario from "../models/usuarios.js";
 import bcryptjs from "bcryptjs";
+import { generarJWT } from "../middlewares/Validarjwt.js";
+
 
 const usuarioPost=async(req, res)=>{
     const {usuario,nombre,apellido,email,contrasena}=req.body
@@ -46,15 +48,6 @@ const fotoPut=async(req, res)=>{
     })
 }
 
-const modificarPut=async(req, res)=>{
-    const {usuario,nombre,apellido,email,contrasena}=req.body
-    const {id}=req.params;
-    const editar=await Usuario.findByIdAndUpdate(id,{usuario,nombre,apellido,email,contrasena})
-    res.json({
-        "msg":"Datos editados con exito"
-    })
-}
-
 
 const activarPut=async(req, res)=>{
     const {id}=req.params;
@@ -73,20 +66,57 @@ const desactivarPut=async(req, res)=>{
 }
 
 
+const editarUsuarioDenuestraapiPeliculasPutAloJholman=async(req,res)=>{
+    const {usuario,nombre,apellido,email,contrasena}=req.body
+    const {id}=req.params;
+    let salt=bcryptjs.genSaltSync(10)
+    const usuarioo=await Usuario.findByIdAndUpdate(id,{usuario,nombre,apellido,email,contrasena})
+    usuarioo.contrasena=bcryptjs.hashSync(contrasena, salt)
 
-const usuarioLogin=async(req, res)=>{
-    let {email,contrasena}=req.query
-    const usuario=await Usuario.findOne({email})//esto significa que esta buscando un email igual al que el usuario esta digitando solo se poone un email para abrebiar
-    const validar=bcryptjs.compareSync(contrasena,usuario.contrasena)
-    if(validar)
-        res.json({
-            "msg":"Bienvenido"
-        })
-    else
-        res.status(401).json({
-            "msg":"Error email o contraseña incorrectos"
-        })
+    res.json({ 
+        "msg":"Editado con exitoso"
+    })
 }
 
 
-export {usuarioPost,usuarioLogin,listarUsuarios,listarId,buscarUsuario,fotoPut,modificarPut,activarPut,desactivarPut}
+const usuarioLogin=async(req, res)=>{
+    const { email, contrasena } = req.query;
+
+        try {
+            const usuario = await Usuario.findOne({ email })
+            if (!usuario) {
+                return res.status(400).json({
+                    msg: "Usuario / Password no son correctos"
+                })
+            }
+
+
+            if (usuario.estado === 0) {
+                return res.status(400).json({
+                    msg: "Usuario Inactivo"
+                })
+            }
+
+            const validPassword = bcryptjs.compareSync(contrasena, usuario.contrasena);
+            if (!validPassword) {
+                return res.status(400).json({
+                    msg: "Usuario / Password no son correctos"
+                })
+            }
+
+            const token = await generarJWT(usuario.id);
+
+            res.json({
+                usuario,
+                token
+            })
+
+        } catch (error) {
+            return res.status(500).json({
+                msg: "Hable con el WebMaster"
+            })
+        }
+}
+
+
+export {usuarioPost,usuarioLogin,listarUsuarios,listarId,buscarUsuario,fotoPut,activarPut,desactivarPut,editarUsuarioDenuestraapiPeliculasPutAloJholman}

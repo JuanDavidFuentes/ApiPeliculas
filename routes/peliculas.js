@@ -3,9 +3,11 @@ import { check } from 'express-validator';
 import { actorBuscarGet, buscarpeliGet, eliminarPeli, idGetPeli, modificarPut, peliculasGet, peliculasPost, posterPut } from '../controllers/peliculas.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import {validarMongoId, validarMongoIdN} from '../middlewares/validar-mongoid.js';
+import { validarJWT } from '../middlewares/Validarjwt.js';
 const routes =Router()
 
 routes.post("/",[
+    validarJWT,
     check('titulo',"El titulo es obligatorio").not().isEmpty(),
     check('titulo',"El titulo tiene que tener menos de 20 caracteres").isLength({max:20}),
     check('subtitulo',"El subtitulo tiene que tener menos de 40 caracteres").isLength({max:40}),
@@ -33,11 +35,13 @@ routes.get("/BuscarActorId/:id",[
 ],actorBuscarGet);
 
 routes.put("/:id",[
+    validarJWT,
     check("id").custom(validarMongoIdN),
     validarCampos
 ],posterPut);
 
 routes.put("/editar/:id",[
+    validarJWT,
     check("id").custom(validarMongoIdN),
     check('titulo',"El titulo es obligatorio").not().isEmpty(),
     check('titulo',"El titulo tiene que tener menos de 20 caracteres").isLength({max:20}),
@@ -52,6 +56,7 @@ routes.put("/editar/:id",[
 ],modificarPut);
 
 routes.delete('/:id',[
+    validarJWT,
     check("id").custom(validarMongoIdN),
     validarCampos
 ],eliminarPeli)
