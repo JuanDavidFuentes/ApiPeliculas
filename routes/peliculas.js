@@ -1,9 +1,11 @@
 import {Router} from 'express';
 import { check } from 'express-validator';
-import { actorBuscarGet, buscarpeliGet, eliminarPeli, idGetPeli, modificarPut, peliculasGet, peliculasPost, posterPut } from '../controllers/peliculas.js';
+import { actorBuscarGet, buscarpeliGet, eliminarPeli, idGetPeli, modificarPut, mostrarImagen, peliculasGet, peliculasPost, posterPut } from '../controllers/peliculas.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import {validarMongoId, validarMongoIdN} from '../middlewares/validar-mongoid.js';
 import { validarJWT } from '../middlewares/Validarjwt.js';
+import validarExistaArchivo from'../middlewares/validar-exista-archivo.js'
+import HelperPelicula from"../helpser/peliculas.js";
 const routes =Router()
 
 routes.post("/",[
@@ -24,25 +26,34 @@ routes.get("/",peliculasGet);
 
 routes.get("/buscar",buscarpeliGet);
 
+routes.get("/upload/:id",[
+    validarJWT,
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas), 
+    validarCampos   
+],mostrarImagen)
+
 routes.get("/buscarID/:id",[
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas),
     validarCampos
 ],idGetPeli);
 
 routes.get("/BuscarActorId/:id",[
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
     validarCampos
 ],actorBuscarGet);
 
 routes.put("/:id",[
     validarJWT,
-    check("id").custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas),
+    validarExistaArchivo,
     validarCampos
 ],posterPut);
 
 routes.put("/editar/:id",[
     validarJWT,
-    check("id").custom(validarMongoIdN),
     check('titulo',"El titulo es obligatorio").not().isEmpty(),
     check('titulo',"El titulo tiene que tener menos de 20 caracteres").isLength({max:20}),
     check('subtitulo',"El subtitulo tiene que tener menos de 40 caracteres").isLength({max:40}),
@@ -57,7 +68,7 @@ routes.put("/editar/:id",[
 
 routes.delete('/:id',[
     validarJWT,
-    check("id").custom(validarMongoIdN),
+    check('id').isMongoId(),
     validarCampos
 ],eliminarPeli)
 

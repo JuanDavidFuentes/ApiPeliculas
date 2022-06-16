@@ -39,7 +39,7 @@ const favPeliTitulo=async(req, res)=>{
 
 const favEliminar=async(req, res)=>{
     const{id}=req.params;
-    const fav=await Fav.findOneAndDelete({id})
+    const fav=await Fav.findOneAndDelete(id)
     res.json({
         "msg":"Se he eliminado correctamente"
     })

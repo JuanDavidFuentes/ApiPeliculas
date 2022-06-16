@@ -18,7 +18,8 @@ router.get('/',actorGet)
 router.get('/buscar',actorBuscar)
 
 router.get('/buscarId/:id',[
-    check('id').custom(validarMongoIdN)
+    check('id').custom(validarMongoIdN),
+    validarCampos
 ],actorBuscarId)
 
 router.put('/:id',[
@@ -27,6 +28,7 @@ router.put('/:id',[
 ],fotoPut)
 
 router.put('/editar/:id',[
+    validarJWT,
     check('nombre',"El nombre es obligatorio").not().isEmpty(),
     check('nombre',"El nombre debe tener menos de 20 caracteres").isLength({max:20}),
     check("id").custom(validarMongoIdN),
@@ -34,6 +36,7 @@ router.put('/editar/:id',[
 ],editarPut)
 
 router.delete('/:id',[
+    validarJWT,
     check("id").custom(validarMongoIdN),
     validarCampos
 ],actorBorrarId)

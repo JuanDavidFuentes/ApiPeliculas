@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import HelperActores from "../helpser/actores.js";
+
+
 
 const validarMongoId = async(reparto) => {
   if (reparto.length > 0) {
@@ -8,12 +11,16 @@ const validarMongoId = async(reparto) => {
       if (!valido) {
         throw new Error("id no valido" );
       }
+      const xx=await HelperActores.existeActores(element)//toco crear un heper para actores
+      if (!xx) {
+        throw new Error("id no existe" );
+      }
     }
   }
 };
 
-const validarMongoIdN=async(_id) => {
-  const validar= mongoose.Types.ObjectId.isValid(_id);
+const validarMongoIdN=async(id) => {
+  const validar= mongoose.Types.ObjectId.isValid(id);
   if(!validar) {
     throw new Error("id no valido")
   }

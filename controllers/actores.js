@@ -22,7 +22,7 @@ const actorBuscar=async(req, res)=>{
 
 const actorBuscarId=async(req, res)=>{
     const {id}=req.params;
-    const idActor=await Actores.find({id})
+    const idActor=await Actores.findById(id)
     res.json({idActor})
 }
 
@@ -46,7 +46,7 @@ const editarPut=async(req, res)=>{
 
 const actorBorrarId=async(req, res)=>{
     const {id}=req.params;
-    const idActor=await Actores.findOneAndDelete({id})
+    const idActor=await Actores.findOneAndDelete(id)
     res.json({
         "msg":"Eliminado exitosamente"
     })

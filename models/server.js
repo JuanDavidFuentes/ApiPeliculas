@@ -6,6 +6,7 @@ import usuario from "../routes/usuarios.js";
 import favoritos from "../routes/favoritos.js";
 import actores from "../routes/actores.js"
 import comentarios from "../routes/comentarios.js"
+import fileupload from "express-fileupload"
 
 class Server{
     constructor(){
@@ -20,6 +21,11 @@ class Server{
         this.app.use(express.json());
         this.app.use(cors());
         // this.app.use(express.static())
+        this.app.use(fileupload({
+            useTempFiles:true,
+            tempFileDir:'/tmp/',
+            createParentPath:true
+        }));
     }
 
     async connectarbd(){
