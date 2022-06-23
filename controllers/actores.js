@@ -1,4 +1,8 @@
-import Actores from "../models/actores.js"
+import Actores from "../models/actores.js";
+import * as fs from 'fs'
+import path from 'path'
+import url from 'url'
+import subirArchivo from "../helpser/subir-archivo.js";
 
 const actorPost=async(req, res)=>{ 
     const{nombre,observaciones}=req.body
@@ -26,13 +30,51 @@ const actorBuscarId=async(req, res)=>{
     res.json({idActor})
 }
 
+const mostrarImagen= async (req, res) => {
+    const { id } = req.params
+
+    try {
+        let actor = await Actores.findById(id)
+        if (actor.foto) {
+            const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+            const pathImage = path.join(__dirname, '../uploads/', actor.foto);
+            if (fs.existsSync(pathImage)) {
+                return res.sendFile(pathImage)
+            }
+        }
+        res.status(400).json({ msg: 'Falta Imagen' })
+    } catch (error) {
+        res.status(400).json({ error })
+    }
+}
+
 const fotoPut=async(req, res)=>{
-    const {foto}=req.body
-    const {id}=req.params;
-    const actorFoto=await Actores.findByIdAndUpdate(id,{foto})
-    res.json({
-        "msg":`Foto insertada`
-    })
+    const { id } = req.params;
+        try {
+            let nombre
+            await subirArchivo(req.files, undefined)
+                .then(value => nombre = value)
+                .catch((err) => console.log(err));
+
+            //persona a la cual pertenece la foto
+            let actor = await Actores.findById(id);
+            //si el usuario ya tiene foto la borramos
+            if (actor.foto) {
+                const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+                const pathImage = path.join(__dirname, '../uploads/', actor.foto);
+                
+                if (fs.existsSync(pathImage)) {               
+                    fs.unlinkSync(pathImage)
+                }
+                
+            }
+           
+            actor= await Actores.findByIdAndUpdate(id, { foto: nombre })
+            //responder
+            res.json({ nombre });
+        } catch (error) {
+            res.status(400).json({ error, 'general': 'Controlador' })
+        }
 }
 
 const editarPut=async(req, res)=>{
@@ -52,4 +94,4 @@ const actorBorrarId=async(req, res)=>{
     })
 }
 
-export{actorPost,actorGet,actorBuscar,actorBuscarId,fotoPut,editarPut,actorBorrarId}
+export{actorPost,actorGet,actorBuscar,actorBuscarId,fotoPut,editarPut,actorBorrarId,mostrarImagen}

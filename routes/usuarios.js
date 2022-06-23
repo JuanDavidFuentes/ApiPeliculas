@@ -1,10 +1,11 @@
 import {Router} from 'express';
-import { activarPut, buscarUsuario, desactivarPut, editarUsuarioDenuestraapiPeliculasPutAloJholman, fotoPut, listarId, listarUsuarios, usuarioLogin, usuarioPost } from '../controllers/usuarios.js';
+import { activarPut, buscarUsuario, desactivarPut, editarUsuarioDenuestraapiPeliculasPutAloJholman, fotoPut, listarId, listarUsuarios, usuarioLogin, usuarioPost, mostrarImagen } from '../controllers/usuarios.js';
 import { check } from 'express-validator';
 import HelperUsuario from '../helpser/usuarios.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
 import { validarJWT } from '../middlewares/Validarjwt.js';
+import validarExistaArchivo from '../middlewares/validar-exista-archivo.js';
 
 const router=Router();
 router.post("/",[
@@ -31,7 +32,7 @@ router.get("/",[
 router.get("/listar",listarUsuarios);
 
 router.get("/listarID/:id",[
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
     validarCampos
 ],listarId);
 
@@ -39,14 +40,24 @@ router.get("/buscarU",buscarUsuario);
 
 router.put("/:id",[
     validarJWT,
-    check("id").custom(validarMongoIdN),
+    check("id").isMongoId(),
+    check('id').custom(HelperUsuario.existeUsuario),
+    validarExistaArchivo,
     validarCampos
 ],fotoPut);
+
+router.get("/upload/:id",[
+    validarJWT,
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(HelperUsuario.existeUsuario), 
+    validarCampos   
+],mostrarImagen)
 
     
 router.put('/editar/:id',[
     validarJWT,
-    check("id").custom(validarMongoIdN),
+    check("id").isMongoId(),
+    check('id').custom(HelperUsuario.existeUsuario),
     check('usuario',"El usuario es obligatorio").not().isEmpty(),
     check('usuario',"Debe tener menos de 20 caracteres").isLength({max:20}),
     check('nombre',"El nombre es obligatorio").not().isEmpty(),
@@ -63,13 +74,15 @@ router.put('/editar/:id',[
 
 router.put('/activar/:id',[
     validarJWT,
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperUsuario.existeUsuario),
     validarCampos
 ],activarPut)
 
 router.put('/desactivar/:id',[
     validarJWT,
     check('id').custom(validarMongoIdN),
+    check('id').custom(HelperUsuario.existeUsuario),
     validarCampos
 ],desactivarPut)
 

@@ -6,6 +6,7 @@ import HelperPelicula from '../helpser/peliculas.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
 import { validarJWT } from '../middlewares/Validarjwt.js';
+import HelperFav from '../helpser/favoritos.js';
 const router =Router()
 
 router.post("/",[
@@ -25,25 +26,29 @@ router.get("/",[
 
 router.get("/listarU/:id",[
     validarJWT,
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperUsuario.existeUsuario),
     validarCampos
 ],favListarU)
 
 router.get("/listarId/:id",[
     validarJWT,
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperFav.existeFav),
     validarCampos
 ],favlistarId)
 
 router.get("/buscarTituloP/:id",[
     validarJWT,
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas),
     validarCampos
 ],favPeliTitulo)
 
 router.delete("/:id",[
     validarJWT,
     check('id').custom(validarMongoIdN),
+    check('id').custom(HelperFav.existeFav),
     validarCampos
 ],favEliminar)
 

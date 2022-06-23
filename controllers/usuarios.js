@@ -1,5 +1,9 @@
 import Usuario from "../models/usuarios.js";
 import bcryptjs from "bcryptjs";
+import subirArchivo from "../helpser/subir-archivo.js";
+import * as fs from 'fs'
+import path from 'path'
+import url from 'url'
 import { generarJWT } from "../middlewares/Validarjwt.js";
 
 
@@ -39,13 +43,51 @@ const buscarUsuario=async(req, res)=>{
 
 }
 
+const mostrarImagen= async (req, res) => {
+    const { id } = req.params
+
+    try {
+        let usuario = await Usuario.findById(id)
+        if (usuario.foto) {
+            const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+            const pathImage = path.join(__dirname, '../uploads/', usuario.foto);
+            if (fs.existsSync(pathImage)) {
+                return res.sendFile(pathImage)
+            }
+        }
+        res.status(400).json({ msg: 'Falta Imagen' })
+    } catch (error) {
+        res.status(400).json({ error })
+    }
+}
+
 const fotoPut=async(req, res)=>{
-    const {foto}=req.body
-    const {id}=req.params;
-    const fotoU=await Usuario.findByIdAndUpdate(id,{foto})
-    res.json({
-        "msg":"foto insertado con exito"
-    })
+    const { id } = req.params;
+        try {
+            let nombre
+            await subirArchivo(req.files, undefined)
+                .then(value => nombre = value)
+                .catch((err) => console.log(err));
+
+            //persona a la cual pertenece la foto
+            let usu = await Usuario.findById(id);
+            //si el usuario ya tiene foto la borramos
+            if (usu.foto) {
+                const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+                const pathImage = path.join(__dirname, '../uploads/', usu.foto);
+                
+                if (fs.existsSync(pathImage)) {               
+                    fs.unlinkSync(pathImage)
+                }
+                
+            }
+           
+            usu= await Usuario.findByIdAndUpdate(id, { foto: nombre })
+            //responder
+            res.json({ nombre });
+        } catch (error) {
+            res.status(400).json({ error, 'general': 'Controlador' })
+        }
 }
 
 
@@ -72,11 +114,12 @@ const editarUsuarioDenuestraapiPeliculasPutAloJholman=async(req,res)=>{
     let salt=bcryptjs.genSaltSync(10)
     const usuarioo=await Usuario.findByIdAndUpdate(id,{usuario,nombre,apellido,email,contrasena})
     usuarioo.contrasena=bcryptjs.hashSync(contrasena, salt)
-
+    await usuarioo.save()
     res.json({ 
         "msg":"Editado con exitoso"
     })
 }
+
 
 
 const usuarioLogin=async(req, res)=>{
@@ -119,4 +162,4 @@ const usuarioLogin=async(req, res)=>{
 }
 
 
-export {usuarioPost,usuarioLogin,listarUsuarios,listarId,buscarUsuario,fotoPut,activarPut,desactivarPut,editarUsuarioDenuestraapiPeliculasPutAloJholman}
+export {usuarioPost,usuarioLogin,listarUsuarios,listarId,buscarUsuario,fotoPut,activarPut,desactivarPut,editarUsuarioDenuestraapiPeliculasPutAloJholman,mostrarImagen}

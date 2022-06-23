@@ -5,7 +5,10 @@ const HelperPelicula={
         const existe =await Peliculas.findById(id)
         if(! existe) throw new Error("Pelicula no existe en la base de datos")
     },
-    
+    existePeliculasPorTitulo:async(titulo)=>{
+        const existe =await Peliculas.findById(titulo)
+        if(! existe) throw new Error("Pelicula no existe")
+    },
 }
 
 

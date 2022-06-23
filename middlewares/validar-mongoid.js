@@ -12,8 +12,8 @@ const validarMongoId = async(reparto) => {
         throw new Error("id no valido" );
       }
       const xx=await HelperActores.existeActores(element)
-      if (!xx) {
-        throw new Error("id ya existe" );
+      if (xx) {
+        throw new Error("id no existe" );
       }
     }
   }

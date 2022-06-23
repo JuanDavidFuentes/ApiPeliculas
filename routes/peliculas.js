@@ -24,7 +24,10 @@ routes.post("/",[
 
 routes.get("/",peliculasGet);
 
-routes.get("/buscar",buscarpeliGet);
+routes.get("/buscar",[
+    check('titulo',"El titulo es obligatorio").not().isEmpty(),
+    validarCampos
+],buscarpeliGet);
 
 routes.get("/upload/:id",[
     validarJWT,
@@ -69,6 +72,7 @@ routes.put("/editar/:id",[
 routes.delete('/:id',[
     validarJWT,
     check('id').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas),
     validarCampos
 ],eliminarPeli)
 

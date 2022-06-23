@@ -6,6 +6,7 @@ import HelperPelicula from '../helpser/peliculas.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
 import { validarJWT } from '../middlewares/Validarjwt.js';
+import HelperComen from '../helpser/comentario.js';
 
 const router=Router();
 
@@ -23,17 +24,20 @@ router.post('/',[
 router.get('/',comentarioGet);
 
 router.get("/listarCdeU/:id",[
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperUsuario.existeUsuario),
     validarCampos
 ],listarCdeU);
 
 router.get("/listarCdeP/:id",[
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas),
     validarCampos
 ],listarCdeP);
 
 router.get("/listarId/:id",[
-    check('id').custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperComen.existeComen),
     validarCampos
 ],listarIdC);
 
@@ -41,7 +45,8 @@ router.get("/buscarC",buscarC);
 
 router.delete("/:id",[
     validarJWT,
-    check("id").custom(validarMongoIdN),
+    check('id').isMongoId(),
+    check('id').custom(HelperComen.existeComen),
     validarCampos
 ],eliminarC);
 
