@@ -23,7 +23,7 @@ router.post("/",[
     validarCampos
 ],usuarioPost);
 
-router.get("/",[
+router.post("/login",[
     check('email').custom(HelperUsuario.noexisteEmail),
     check('email',"No es un email valido").isEmail(),
     validarCampos

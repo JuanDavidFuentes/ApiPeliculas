@@ -123,7 +123,7 @@ const editarUsuarioDenuestraapiPeliculasPutAloJholman=async(req,res)=>{
 
 
 const usuarioLogin=async(req, res)=>{
-    const { email, contrasena } = req.query;
+    const { email, contrasena } = req.body;
 
         try {
             const usuario = await Usuario.findOne({ email })
