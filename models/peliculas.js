@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const PersonSchema = new mongoose.Schema({
-    titulo:{type:String,maxlength:20,required:true},
-    subtitulo:{type:String,maxlength:40},
+    titulo:{type:String,maxlength:100,required:true},
+    subtitulo:{type:String},
     fecha:{type:Date,required:true},
     descripcion:{type:String,required:true},
-    genero:{type:String,maxlength:20,required:true},
+    genero:{type:String,required:true},
     duracion:{type:String,required:true},
     calificacion:{type:Number},
     imagen:{type:String},
