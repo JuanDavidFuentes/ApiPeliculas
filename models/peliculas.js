@@ -7,7 +7,7 @@ const PersonSchema = new mongoose.Schema({
     descripcion:{type:String,required:true},
     genero:{type:String,required:true},
     duracion:{type:String,required:true},
-    calificacion:{type:Number},
+    calificacion:{type:String},
     imagen:{type:String},
     reparto:[
         {idactor:{type:mongoose.Schema.ObjectId,ref:"Actores",required:true},

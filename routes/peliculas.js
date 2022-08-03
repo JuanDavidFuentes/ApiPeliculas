@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import { check } from 'express-validator';
-import { actorBuscarGet, buscarpeliGet, eliminarPeli, idGetPeli, modificarPut, mostrarImagen, peliculasGet, peliculasPost, posterPut } from '../controllers/peliculas.js';
+import {cargarArchivoCloud, mostrarImagenCloud, actorBuscarGet, buscarpeliGet, eliminarPeli, idGetPeli, modificarPut, mostrarImagen, peliculasGet, peliculasPost, posterPut } from '../controllers/peliculas.js';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import {validarMongoId, validarMongoIdN} from '../middlewares/validar-mongoid.js';
 import { validarJWT } from '../middlewares/Validarjwt.js';
@@ -25,6 +25,15 @@ routes.get("/buscar",[
     check('titulo',"El titulo es obligatorio").not().isEmpty(),
     validarCampos
 ],buscarpeliGet);
+
+
+routes.get("/uploadClou/:id",[
+    validarJWT,
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas), 
+    validarCampos   
+],mostrarImagenCloud)
+
 
 routes.get("/upload/:id",[
     validarJWT,
@@ -51,6 +60,14 @@ routes.put("/:id",[
     validarExistaArchivo,
     validarCampos
 ],posterPut);
+
+routes.put("/cargarCloud/:id",[
+    validarJWT,
+    check('id').isMongoId(),
+    check('id').custom(HelperPelicula.existePeliculas),
+    validarExistaArchivo,
+    validarCampos
+],cargarArchivoCloud);
 
 routes.put("/editar/:id",[
     validarJWT,

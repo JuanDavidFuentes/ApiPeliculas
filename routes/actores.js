@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import { actorBorrarId, mostrarImagen, actorBuscar, actorBuscarId, actorGet, actorPost, editarPut, fotoPut } from '../controllers/actores.js';
+import { actorBorrarId, mostrarImagen, actorBuscar, actorBuscarId, actorGet, actorPost, editarPut, fotoPut, mostrarImagenCloudA, cargarArchivoCloudA } from '../controllers/actores.js';
 import { check } from 'express-validator';
 import { validarCampos } from '../middlewares/validar-campos.js';
 import { validarMongoIdN } from '../middlewares/validar-mongoid.js';
@@ -32,6 +32,13 @@ router.get("/upload/:id",[
     validarCampos   
 ],mostrarImagen)
 
+router.get("/uploadClou/:id",[
+    validarJWT,
+    check('id', 'No es un ID válido').isMongoId(),
+    check('id').custom(HelperActores.existeActores), 
+    validarCampos   
+],mostrarImagenCloudA)
+
 router.put('/:id',[
     validarJWT,
     check('id').isMongoId(),
@@ -39,6 +46,14 @@ router.put('/:id',[
     validarExistaArchivo,
     validarCampos
 ],fotoPut)
+
+router.put("/cargarCloud/:id",[
+    validarJWT,
+    check('id').isMongoId(),
+    check('id').custom(HelperActores.existeActores),
+    validarExistaArchivo,
+    validarCampos
+],cargarArchivoCloudA);
 
 router.put('/editar/:id',[
     validarJWT,

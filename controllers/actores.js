@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import path from 'path'
 import url from 'url'
 import subirArchivo from "../helpser/subir-archivo.js";
+import { v2 as cloudinary } from 'cloudinary'
 
 const actorPost=async(req, res)=>{ 
     const{nombre,observaciones}=req.body
@@ -77,6 +78,58 @@ const fotoPut=async(req, res)=>{
         }
 }
 
+const cargarArchivoCloudA= async (req, res) => {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_NAME,
+        api_key: process.env.CLOUDINARY_KEY,
+        api_secret: process.env.CLOUDINARY_SECRET,
+        secure: true
+    });
+
+    const { id } = req.params;
+    try {
+        //subir archivo
+        const { tempFilePath } = req.files.archivo
+        cloudinary.uploader.upload(tempFilePath,
+            { width: 250, crop: "limit" },
+            async function (error, result) {
+                if (result) {
+                    let actor = await Actores.findById(id);
+                    if (actor.foto) {
+                        const nombreTemp = actor.foto.split('/')
+                        const nombreArchivo = nombreTemp[nombreTemp.length - 1] // hgbkoyinhx9ahaqmpcwl jpg
+                        const [public_id] = nombreArchivo.split('.')
+                        cloudinary.uploader.destroy(public_id)
+                    }
+                    actor = await Actores.findByIdAndUpdate(id, { foto: result.url })
+                    //responder
+                    res.json({ url: result.url });
+                } else {
+                    res.json(error)
+                }
+
+            })
+    } catch (error) {
+        res.status(400).json({ error, 'general': 'Controlador' })
+    }
+}
+
+
+const mostrarImagenCloudA= async (req, res) => {
+    const { id } = req.params
+
+    try {
+        let actor = await Actores.findById(id)
+        if (actor.foto) {
+            return res.json({ url: actor.foto })
+        }
+        res.status(400).json({ msg: 'Falta Imagen' })
+    } catch (error) {
+        res.status(400).json({ error })
+    }
+}
+
+
 const editarPut=async(req, res)=>{
     const {nombre,observaciones}=req.body
     const {id}=req.params;
@@ -94,4 +147,4 @@ const actorBorrarId=async(req, res)=>{
     })
 }
 
-export{actorPost,actorGet,actorBuscar,actorBuscarId,fotoPut,editarPut,actorBorrarId,mostrarImagen}
+export{cargarArchivoCloudA,mostrarImagenCloudA,actorPost,actorGet,actorBuscar,actorBuscarId,fotoPut,editarPut,actorBorrarId,mostrarImagen}
