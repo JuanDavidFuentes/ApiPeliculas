@@ -20,10 +20,17 @@ const favget=async(req, res)=>{
 }
 
 const favListarU=async(req, res)=>{
+    // const {id}=req.params;
+    // const pelicula=await peliculas
+    // .find({_id:id})
+    // .populate("reparto.idactor",["nombre","foto","observaciones"])
+    // res.json({
+    //     pelicula
+    // })
     const {id}=req.params;
     const fav=await Fav
     .find({usuario:id})
-    .populate("usuario")
+    .populate("pelicula")
     res.json({fav})
 }
 

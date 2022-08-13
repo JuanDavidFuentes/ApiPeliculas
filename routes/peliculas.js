@@ -19,7 +19,10 @@ routes.post("/",[
     validarCampos
 ],peliculasPost);
 
-routes.get("/",peliculasGet);
+routes.get("/",[
+    validarJWT,
+]
+,peliculasGet);
 
 routes.get("/buscar",[
     check('titulo',"El titulo es obligatorio").not().isEmpty(),
