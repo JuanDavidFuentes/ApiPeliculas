@@ -21,7 +21,9 @@ const favget=async(req, res)=>{
 
 const favListarU=async(req, res)=>{
     const {id}=req.params;
-    const fav=await Fav.find().where('usuario').in(id).exec();
+    const fav=await Fav
+    .find({usuario:id})
+    .populate("usuario")
     res.json({fav})
 }
 
@@ -33,7 +35,9 @@ const favlistarId=async(req, res)=>{
 
 const favPeliTitulo=async(req, res)=>{
     const{id}=req.params;
-    const fav=await Fav.find().where('pelicula').in(id).exec();
+    const fav=await Fav
+    .find({pelicula:id})
+    .populate("pelicula")
     res.json({fav})
 }
 
