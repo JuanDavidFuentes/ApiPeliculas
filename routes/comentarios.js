@@ -18,6 +18,7 @@ router.post('/',[
     check('pelicula',"La pelicula es obligatoria").not().isEmpty(),
     check('pelicula',"Pelicula no existe").isMongoId(),
     check('pelicula').custom(HelperPelicula.existePeliculas),
+    check('comentario',"El comentario es obligatorio").not().isEmpty(),
     validarCampos
 ],comentarioPost);
 
