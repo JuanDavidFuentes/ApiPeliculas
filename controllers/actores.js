@@ -10,7 +10,7 @@ const actorPost=async(req, res)=>{
     const actor=new Actores({nombre,observaciones})
     await actor.save()
     res.json({
-        "msg":"Actor agregado exitosamente 👌"
+        actor
     })
 }
 
