@@ -11,6 +11,7 @@ const peliculasPost=async(req,res)=>{
     await pelicula.save();
 
     res.json({
+        pelicula,
         "msg":"Pelicula creada exitosamente."
     })
 }
