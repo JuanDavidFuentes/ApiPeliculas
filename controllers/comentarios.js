@@ -47,7 +47,7 @@ const buscarC=async(req, res)=>{
 
 const eliminarC=async(req, res)=>{
     const {id}=req.params;
-    const com= await Comentario.findOneAndDelete(id)
+    const com= await Comentario.findByIdAndDelete(id)
     res.json({
         "msg":"Comentario eliminado exitosamente"
     })

@@ -158,7 +158,7 @@ const modificarPut=async(req, res)=>{
 
 const eliminarPeli=async(req, res)=>{
     const {id}=req.params;
-    const peli=await peliculas.findOneAndDelete({id})
+    const peli=await peliculas.findByIdAndDelete(id)
     res.json({
         "msg":"Se elimino exitosamente"
     })
