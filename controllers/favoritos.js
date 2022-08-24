@@ -5,7 +5,8 @@ const favpost=async(req, res)=>{
     const fav=new Fav({usuario,pelicula})
     await fav.save();
     res.json({
-        "msg":`Se a añadido exitosamente la pelicula a favoritos`
+        "msg":`Se a añadido exitosamente la pelicula a favoritos`,
+        fav
     })
 }
 
