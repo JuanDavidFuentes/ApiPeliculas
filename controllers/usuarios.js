@@ -163,10 +163,10 @@ const desactivarPut=async(req, res)=>{
 
 
 const editarUsuarioDenuestraapiPeliculasPutAloJholman=async(req,res)=>{
-    const {usuario,nombre,apellido,email,contrasena}=req.body
+    const {usuario,nombre,apellido,contrasena}=req.body
     const {id}=req.params;
     let salt=bcryptjs.genSaltSync(10)
-    const usuarioo=await Usuario.findByIdAndUpdate(id,{usuario,nombre,apellido,email,contrasena})
+    const usuarioo=await Usuario.findByIdAndUpdate(id,{usuario,nombre,apellido,contrasena})
     usuarioo.contrasena=bcryptjs.hashSync(contrasena, salt)
     await usuarioo.save()
     res.json({ 

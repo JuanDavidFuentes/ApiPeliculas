@@ -25,14 +25,20 @@ const peliculasGet = async(req, res)=>{
     })
 }
 
-
-const buscarpeliGet=async(req, res)=>{
-    const {titulo}=req.query;
-    const pelicula=await peliculas.find({titulo})
-    res.json({
-        pelicula
-    })
+//listar por titulo
+const buscarpeliGet=async(req,res)=>{
+    const {titulo}=req.query
+    const pelicula = await peliculas.find(
+        {
+            $or: [
+                { titulo: new RegExp(titulo, "i") },
+            ]
+        }
+    )
+    .populate("reparto.idactor",["nombre","foto","observaciones"])
+    res.json({pelicula})
 }
+
 
 const idGetPeli=async(req, res)=>{
     const {id}=req.params;

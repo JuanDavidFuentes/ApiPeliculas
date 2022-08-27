@@ -71,9 +71,9 @@ router.put('/editar/:id',[
     check('nombre',"Debe tener menos de 20 caracteres").isLength({max:20}),
     check('apellido',"El apellido es obligatorio").not().isEmpty(),
     check('apellido',"Debe tener menos de 20 caracteres").isLength({max:20}),
-    check('email',"El email es obligatorio").not().isEmpty(),
-    check('email',"No es un email valido").isEmail(),
-    check('email').custom(HelperUsuario.existeEmail),
+    // check('email',"El email es obligatorio").not().isEmpty(),
+    // check('email',"No es un email valido").isEmail(),
+    // check('email').custom(HelperUsuario.existeEmail),
     check('contrasena',"El contrasena es obligatorio").not().isEmpty(),
     check('contrasena',"Debe tener mas de 6 caracteres").isLength({min:6}),
     validarCampos

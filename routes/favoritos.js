@@ -22,6 +22,7 @@ router.post("/",[
 
 router.get("/",[
     validarJWT,
+    validarCampos
 ],favget)
 
 router.get("/listarU/:id",[
