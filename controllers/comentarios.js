@@ -28,7 +28,8 @@ const listarCdeU=async(req, res)=>{
 
 const listarCdeP=async(req, res)=>{
     const {id}=req.params;
-    const comen=await Comentario.find().where('pelicula').in(id).exec();
+    const comen=await Comentario.find({pelicula:id})
+    .populate("usuario","usuario")
     res.json({comen})
 }
 

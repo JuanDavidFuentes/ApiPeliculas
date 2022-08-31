@@ -10,9 +10,9 @@ import { v2 as cloudinary } from 'cloudinary';
 
 
 const usuarioPost=async(req, res)=>{
-    const {usuario,nombre,apellido,email,contrasena}=req.body
+    const {usuario,nombre,apellido,email,contrasena,rol}=req.body
     let salt=bcryptjs.genSaltSync(10)
-    const usuarioo=new Usuario({usuario,nombre,apellido,email,contrasena})
+    const usuarioo=new Usuario({usuario,nombre,apellido,email,contrasena,rol})
     usuarioo.contrasena=bcryptjs.hashSync(contrasena, salt)
     await usuarioo.save()
 
