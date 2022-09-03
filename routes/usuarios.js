@@ -25,7 +25,7 @@ router.post("/",[
 
 router.post("/login",[
     check('email').custom(HelperUsuario.noexisteEmail),
-    check('email',"No es un email valido").isEmail(),
+    check('email',"No es un email valido").isEmail(), 
     validarCampos
 ], usuarioLogin);
 
