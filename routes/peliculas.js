@@ -82,7 +82,7 @@ routes.put("/editar/:id",[
     check('genero',"El genero es obligatorio").not().isEmpty(),
     check('genero',"El genero tiene que tener menos de 20 caracteres").isLength({max:20}),
     check('duracion',"La duracion es obligatoria").not().isEmpty(),
-    check('reparto').custom(validarMongoId),
+    check('reparto').custom(HelperPelicula.reparto),
     validarCampos
 ],modificarPut);
 

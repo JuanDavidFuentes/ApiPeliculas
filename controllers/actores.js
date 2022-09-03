@@ -19,9 +19,21 @@ const actorGet=async(req, res)=>{
     res.json({actor})
 }
 
-const actorBuscar=async(req, res)=>{
-    const {nombre}=req.query;
-    const actor=await Actores.find({nombre})
+// const actorBuscar=async(req, res)=>{
+//     const {nombre}=req.query;
+//     const actor=await Actores.find({nombre})
+//     res.json({actor})
+// }
+
+const actorBuscar=async(req,res)=>{
+    const {nombre}=req.query
+    const actor = await Actores.find(
+        {
+            $or: [
+                { nombre: new RegExp(nombre, "i") },
+            ]
+        }
+    )
     res.json({actor})
 }
 
