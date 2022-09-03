@@ -15,7 +15,7 @@ routes.post("/",[
     check('descripcion',"La descripcion es obligatorioa").not().isEmpty(),
     check('genero',"El genero es obligatorio").not().isEmpty(),
     check('duracion',"La duracion es obligatoria").not().isEmpty(),
-    check('reparto').custom(validarMongoId),
+    check('reparto').custom(HelperPelicula.reparto),
     validarCampos
 ],peliculasPost);
 

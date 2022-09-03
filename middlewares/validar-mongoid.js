@@ -26,4 +26,19 @@ const validarMongoIdN=async(id) => {
   }
 }
 
-export {validarMongoId,validarMongoIdN}
+const validarRepartoActor=(idactor)=>{
+  return new Promise(async (resolve, reject) =>{
+    const valido =mongoose.Types.ObjectId.isValid(idactor);
+    if(!valido) {
+      reject("id no valido")
+    }else{
+      const xx = await HelperActores.existeActores2(idactor)
+      if (!xx) {
+        reject("id no existe")
+      }
+    }
+    resolve("");
+  })
+}
+
+export {validarMongoId,validarMongoIdN,validarRepartoActor}
