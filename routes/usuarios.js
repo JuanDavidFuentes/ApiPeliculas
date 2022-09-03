@@ -21,7 +21,7 @@ router.post("/",[
     check('contrasena',"El contrasena es obligatorio").not().isEmpty(),
     check('contrasena',"Debe tener mas de 6 caracteres").isLength({min:6}),
     validarCampos
-],usuarioPost);
+],usuarioPost); 
 
 router.post("/login",[
     check('email').custom(HelperUsuario.noexisteEmail),
