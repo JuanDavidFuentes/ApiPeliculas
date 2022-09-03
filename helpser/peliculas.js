@@ -11,7 +11,7 @@ const HelperPelicula={
         if(! existe) throw new Error("Pelicula no existe")
     },
     reparto:async(reparto)=>{
-        
+
         for (let i = 0; i < reparto.length; i++) {
             if(reparto[i].idactor!==""){
                 await validarMongoIdN(reparto.idactor).catch(err => {
@@ -25,7 +25,7 @@ const HelperPelicula={
             }
         }
 
-    },
+    }, 
 }
 
 
